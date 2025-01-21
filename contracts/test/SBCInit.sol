@@ -7,12 +7,8 @@ import {SBCToken} from "../SBCToken.sol";
 import {SBCTokenProxy} from "../SBCTokenProxy.sol";
 
 contract SBCInit {
-    constructor(address admin, uint256 initialGNOStake, address GNOTokenProxyAddr, address depositProxyAddr) {
-        SBCToken GNOToken = SBCToken(GNOTokenProxyAddr);
+    constructor(address admin, address GNOTokenProxyAddr, address depositProxyAddr) {
         SBCDepositContractProxy depositContractProxy = SBCDepositContractProxy(payable(depositProxyAddr));
-
-        // Prefund the admin account with some balance to test deposits
-        GNOToken.mint(admin, initialGNOStake);
 
         // Change default admin on deploy (system sender) to actual admin
         depositContractProxy.setAdmin(admin);
