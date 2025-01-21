@@ -16,7 +16,7 @@ contract SBCInit {
 
         // Change default admin on deploy (system sender) to actual admin
         depositContractProxy.setAdmin(admin);
-        SBCTokenProxy(payable(GNOTokenProxyAddr)).setMinter(admin);
+        SBCToken(payable(GNOTokenProxyAddr)).setMinter(admin);
         SBCTokenProxy(payable(GNOTokenProxyAddr)).setAdmin(admin);
     }
 }
