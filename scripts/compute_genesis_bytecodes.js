@@ -35,8 +35,6 @@ async function main() {
   const depositAddress = "0xbabe2bed00000000000000000000000000000003";
   const initializerAddress = "0xface2face0000000000000000000000000000000";
   const GNOTokenAddress = "0xbabe2bed00000000000000000000000000000002";
-  const mGNOTokenAddress = "0xbabe2bed00000000000000000000000000000001";
-  const wrapperAddress = "0xbabe2bed00000000000000000000000000000004";
   const initialGNOStake = 1 * 10_000;
 
   if (!admin) throw Error("must set ADMIN env");
@@ -57,17 +55,10 @@ async function main() {
     }
   }
 
-  // Token proxy
-  addBytecode(
-    mGNOTokenAddress,
-    SBCTokenProxy.bytecode,
-    web3.eth.abi.encodeParameters(["address", "string", "string"], [initializerAddress, "mGNO devnet", "mGNO"])
-  );
-
   // Stake token proxy
   addBytecode(
     GNOTokenAddress,
-    UnsafeTokenProxy.bytecode,
+    SBCTokenProxy.bytecode,
     web3.eth.abi.encodeParameters(["address", "string", "string"], [initializerAddress, "Stake GNO", "GNO"])
   );
 
@@ -78,20 +69,13 @@ async function main() {
     web3.eth.abi.encodeParameters(["address", "address"], [initializerAddress, GNOTokenAddress])
   );
 
-  // Wrapper proxy
-  addBytecode(
-    wrapperAddress,
-    SBCWrapperProxy.bytecode,
-    web3.eth.abi.encodeParameters(["address", "address", "address"], [initializerAddress, mGNOTokenAddress, depositAddress])
-  );
-
   // Initializer
   addBytecode(
     initializerAddress,
     SBCInit.bytecode,
     web3.eth.abi.encodeParameters(
-      ["address", "uint256", "address", "address", "address", "address"],
-      [admin, web3.utils.toWei(initialGNOStake.toString()), mGNOTokenAddress, GNOTokenAddress, depositAddress, wrapperAddress]
+      ["address", "uint256", "address", "address"],
+      [admin, web3.utils.toWei(initialGNOStake.toString()), GNOTokenAddress, depositAddress]
     )
   );
 
